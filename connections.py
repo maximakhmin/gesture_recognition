@@ -2,11 +2,10 @@ import mediapipe as mp
 from mediapipe.tasks.python.components.containers import landmark
 
 hand_landmark_default = [landmark.NormalizedLandmark(
-    x=0, y=0, z=0, visibility=0, presence=None, name=None
+    x=0, y=0, z=0, visibility=0, presence=None
 ) for i in range(21)]
 
 def connect_results(hand_detection_result, pose_detection_result):
-    print(hand_detection_result)
     landmarks = []
     if len(pose_detection_result.pose_landmarks) != 1:
         return landmarks
