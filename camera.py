@@ -8,6 +8,7 @@ from mss import mss
 from datetime import datetime as dt
 import time
 
+
 # -----------------
 # mediapipe 0.10.32
 # -----------------
@@ -35,7 +36,7 @@ def draw_landmarks_on_image(bgr_image, hand_detection_result, pose_detection_res
 
 
 
-hand_base_options = python.BaseOptions(model_asset_path='hand_landmarker.task')
+hand_base_options = python.BaseOptions(model_asset_path='models/tracking/hand_landmarker.task')
 hand_options = vision.HandLandmarkerOptions(
     base_options=hand_base_options,
     running_mode=mp.tasks.vision.RunningMode.VIDEO,
@@ -46,7 +47,7 @@ hand_options = vision.HandLandmarkerOptions(
 )
 hand_detector = vision.HandLandmarker.create_from_options(hand_options)
 
-pose_base_options = python.BaseOptions(model_asset_path='pose_landmarker_full.task')
+pose_base_options = python.BaseOptions(model_asset_path='models/tracking/pose_landmarker_full.task')
 pose_options = vision.PoseLandmarkerOptions(
     base_options=pose_base_options,
     running_mode=mp.tasks.vision.RunningMode.VIDEO,
