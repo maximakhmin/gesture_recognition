@@ -1,6 +1,12 @@
 import mediapipe as mp
 from mediapipe.tasks.python.components.containers import landmark
 
+
+# -----------------
+# mediapipe 0.10.32
+# -----------------
+
+
 hand_landmark_default = [landmark.NormalizedLandmark(
     x=0, y=0, z=0, visibility=0, presence=None
 ) for i in range(21)]

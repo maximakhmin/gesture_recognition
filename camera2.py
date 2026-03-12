@@ -9,9 +9,9 @@ mp_holistic = mp.solutions.holistic
 holistic = mp_holistic.Holistic(
     static_image_mode=False, 
     model_complexity=2,
-    smooth_landmarks=False,
-    min_detection_confidence=0.6,
-    min_tracking_confidence=0.6,
+    smooth_landmarks=True,
+    min_detection_confidence=0.7,
+    min_tracking_confidence=0.7,
     refine_face_landmarks=False,
 )
 
