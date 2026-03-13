@@ -6,21 +6,9 @@ from mediapipe.framework.formats.landmark_pb2 import NormalizedLandmark, Normali
 from matplotlib import pyplot as plt
 
 
-mp_holistic = mp.solutions.holistic
-
 DATA_SHAPE = (55, 3)
 
-holistic = mp_holistic.Holistic(
-    static_image_mode=True, 
-    model_complexity=2,
-    smooth_landmarks=True,
-    min_detection_confidence=0.7,
-    min_tracking_confidence=0.7,
-    refine_face_landmarks=False,
-)
-
-
-def get_data(image, model=holistic, pose_min_visibility=0):
+def get_data(image, model, pose_min_visibility=0):
     detection_results = model.process(image)
     width = image.shape[1]
     height = image.shape[0]
@@ -69,11 +57,13 @@ def get_data(image, model=holistic, pose_min_visibility=0):
 
     return data
 
+
 def get_null_data():
     null_data = np.ndarray(shape=DATA_SHAPE)
     for i in range(len(null_data)):
         null_data[i] = np.array([None, None, None]) 
     return null_data
+
 
 def normalize_data(data):
     if None in data[3] or None in data[4]:
@@ -121,7 +111,7 @@ def draw_data_on_image(bgr_image, data):
     return annotated_image
 
 
-def process_video(video_file_name, output_file_name, buffer=50):
+def process_video(video_file_name, output_file_name, model, buffer=50):
 
     cap = cv2.VideoCapture(video_file_name)
 
@@ -138,24 +128,45 @@ def process_video(video_file_name, output_file_name, buffer=50):
         if not success:
             break
         
-        d=get_data(image)
+        d=get_data(image, model)
         norm_d = normalize_data(d)
         if ind<buffer:
             queue[ind] = norm_d
             ind += 1
         else:
-            dataset = np.append(dataset, [fill_none(queue)], axis=0)
+            dataset = np.append(dataset, [fill_none(queue, buffer)], axis=0)
 
             for i in range(len(queue)-1):
                 queue[i] = queue[i+1]
             queue[len(queue)-1] = norm_d
 
-    dataset = np.append(dataset, [fill_none(queue)], axis=0)
+    dataset = np.append(dataset, [fill_none(queue, buffer)], axis=0)
 
     np.save(output_file_name, dataset)
 
+    return queue
+
         
-def fill_none(data):
-    return data   
+def fill_none(data, buffer):
+
+    filled_data = data.copy()
+
+    for landmark in range(DATA_SHAPE[0]):
+        for coord in range(DATA_SHAPE[1]):
+            row = data[:, landmark, coord]
+            xp = []
+            fp = []
+            for i in range(len(row)):
+                if not np.isnan(row[i]):
+                    xp.append(i)
+                    fp.append(row[i])
+            if len(xp)==0:
+                filled_data[:, landmark, coord] = np.zeros(shape=buffer)
+            else:
+                filled_data[:, landmark, coord] = np.interp(x=range(buffer), xp=xp, fp=fp)
+
+    return filled_data   
+
+
 
 
