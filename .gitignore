@@ -1,5 +1,8 @@
 __pycache__
-*_output.txt
+*output*.txt
 .venv
 images
 models/embedding/fasttext-ru
+tracking
+dataset/train
+dataset/test

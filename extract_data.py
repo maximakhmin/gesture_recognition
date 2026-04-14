@@ -3,11 +3,11 @@ from multiprocessing import Pool
 import mediapipe as mp
 import time
 import pandas as pd
-
+from tqdm import tqdm
 
 def extract_data_fun(param):
 
-    path = "E:/slovo/"
+    path = "dataset/"
     df = pd.read_csv(path + "annotations.csv", sep="\t")
 
     start = 0
@@ -26,25 +26,21 @@ def extract_data_fun(param):
         refine_face_landmarks=False,
     )
 
-    for i in range(start+offset, end, num_processors):
+    for i in tqdm(range(start+offset, end, num_processors)):
         file_name = df.loc[i, "attachment_id"]
         y = df.loc[i, "text"]
         folder = "train/" if df.loc[i, "train"] else "test/"
         process_video(path+folder+file_name + ".mp4",
-                    path+"tracking/"+folder+file_name + ".npy",
+                    "tracking/60/"+folder+file_name + ".npy",
                     model = holistic,
-                    buffer = 40)
+                    buffer = 60)
         
-        print(f"{i}\t{file_name}", flush=True)
+        # print(f"{i}\t{file_name}", flush=True)
 
 
 
 if __name__ == '__main__':
    
-    path = "E:/slovo/"
-    df = pd.read_csv(path + "annotations.csv", sep="\t")
-
-
     params = []
     num_processors = 6
     for i in range(num_processors):

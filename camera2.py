@@ -107,7 +107,7 @@ def video(file_name):
 window_name = 'Tracking'
 cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
 
-video("train/0e265c95-92f0-44fd-8ace-63693e461d1d.mp4")    
+video("dataset/train/b65c0f17-7e46-4528-af75-a05420ba4a2a.mp4")    
 # camera()
 
 cv2.destroyAllWindows()
