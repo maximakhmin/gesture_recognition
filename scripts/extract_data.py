@@ -1,4 +1,4 @@
-from connections2 import process_video
+from scripts.connections2 import process_video
 from multiprocessing import Pool
 import mediapipe as mp
 import time

@@ -3,7 +3,7 @@ import numpy as np
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-from connections import connect_results, CONNECTIONS
+from scripts.connections import connect_results, CONNECTIONS
 from mss import mss
 from datetime import datetime as dt
 import time
